@@ -6,11 +6,10 @@ import { OnboardingLayout } from "src/layouts/onboarding/layout";
 import HomePage from "src/pages/onboarding/onboarding";  // Import directly
 
 const layoutContent = (
-  <OnboardingLayout>
     <Suspense fallback={<LoadingScreen />}>
       <Outlet />
     </Suspense>
-  </OnboardingLayout>
+
 );
 
 export const onboardingRoutes = [

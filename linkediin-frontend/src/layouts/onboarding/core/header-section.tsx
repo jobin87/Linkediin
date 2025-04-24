@@ -102,6 +102,7 @@ export function HeaderSection({
           ...(!disableOffset && offsetTop && toolbarStyles.offset),
           ...slotProps?.toolbar?.sx,
           gap: 1,
+          mt:1
         }}
       >
         <Container
@@ -135,6 +136,7 @@ export function HeaderSection({
               justifyContent: "center", // Center-align for all screen sizes
               alignItems: "center",
               gap: 2,
+              ml:0
             }}
           >
             {slots?.centerArea}

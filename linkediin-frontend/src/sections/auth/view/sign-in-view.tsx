@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 import useUniqueBrowserId from "src/hooks/use-browser-id";
 import { FormHead } from "../form-head";
 import { useNavigate } from "react-router-dom";
+import { Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
@@ -40,23 +41,25 @@ export const SignInSchema = zod.object({
     .min(1, { message: "Password is required!" })
     .min(6, { message: "Password must be at least 6 characters!" }),
   deviceId: zod.string().min(1, { message: "Device ID is required!" }),
+  remember: zod.boolean().optional(),
 });
 
 export function CenteredSignInView() {
   const password = useBoolean();
   const dispatch = useAppDispatch();
   const uniqueBrowserId = useUniqueBrowserId();
-  const navigate= useNavigate()
+  const navigate = useNavigate();
 
   const defaultValues = {
     password: "",
     email: "",
     deviceId: "",
+    remember: false,
   };
 
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
-    defaultValues
+    defaultValues,
   });
 
   const {
@@ -84,7 +87,7 @@ export function CenteredSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     const ipaddress = await getClientIp();
-    console.log(ipaddress)
+    console.log(ipaddress);
     if (await ipaddress) {
       try {
         const response = await dispatch(
@@ -95,9 +98,9 @@ export function CenteredSignInView() {
             clientIP: ipaddress,
           })
         );
-        if(response.payload){
-          navigate(paths.onboarding.root)
-          console.log('1')
+        if (response.payload) {
+          navigate(paths.onboarding.root);
+          console.log("1");
         }
       } catch (error) {
         console.error(error);
@@ -119,16 +122,6 @@ export function CenteredSignInView() {
       />
 
       <Box gap={1.5} display="flex" flexDirection="column">
-        <Link
-          component={RouterLink}
-          href={paths.auth.forgotPassword}
-          variant="body2"
-          color="inherit"
-          sx={{ alignSelf: "flex-end" }}
-        >
-          Forgot password?
-        </Link>
-
         <Field.Text
           name="password"
           label="Password"
@@ -153,6 +146,44 @@ export function CenteredSignInView() {
           }}
         />
       </Box>
+      <FormControlLabel
+        control={
+          <Checkbox
+            {...methods.register("remember")}
+            color="primary"
+            size="small" // ← this shrinks the checkbox
+          />
+        }
+        label="Remember me"
+        sx={{ fontSize: 14, width: "8.8rem", ml: 2 }} // optional: adjust label size
+      />
+
+      <Box
+        sx={{
+          width: "90%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mx: "auto", // ← this centers it horizontally
+          borderRadius: 1,
+        }}
+      >
+        <Typography variant="caption" align="center">
+          By clicking Agree & Join or Continue, you agree to the LinkedIn&nbsp;
+          <Link href="#" underline="always" >
+            User Agreement
+          </Link>
+          ,&nbsp;
+          <Link href="#" underline="always" >
+            Privacy Policy
+          </Link>
+          , and&nbsp;
+          <Link href="#" underline="always">
+            Cookie Policy
+          </Link>
+          .
+        </Typography>
+      </Box>
 
       <LoadingButton
         fullWidth
@@ -162,7 +193,7 @@ export function CenteredSignInView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Sign in
+        Agree And Join
       </LoadingButton>
     </Box>
   );
@@ -170,37 +201,29 @@ export function CenteredSignInView() {
   return (
     <Box
       sx={{
-        py: 5,
-        px: 3,
-        width: 1,
-        borderRadius: 2,
         display: "flex",
         flexDirection: "column",
-        bgcolor: "background.default",
-        maxWidth: "var(--layout-auth-content-width)",
+        alignItems: "center",
       }}
     >
-      {renderLogo}
+      <FormHead title="Make the most of your professional life" />
 
-      <FormHead
-        title="Sign in to your account"
-        description={
-          <>
-            {`Don’t have an account? `}
-            <Link
-              component={RouterLink}
-              href={paths.auth.signUp}
-              variant="subtitle2"
-            >
-              Get started
-            </Link>
-          </>
-        }
-      />
-
-      <Form methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </Form>
+      <Box
+        sx={{
+          py: 8,
+          width: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          bgcolor: "background.default",
+          maxWidth: "var(--layout-auth-content-width)",
+          border: "2px solid",
+        }}
+      >
+        <Form methods={methods} onSubmit={onSubmit}>
+          {renderForm}
+        </Form>
+      </Box>
     </Box>
   );
 }

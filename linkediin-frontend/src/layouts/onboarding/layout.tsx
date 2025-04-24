@@ -35,6 +35,8 @@ import { Settings } from "@mui/icons-material";
 import { SettingsButton } from "../components/settings-button";
 import { HeaderSection } from "./core/header-section";
 import { Button, Divider, Typography, useMediaQuery } from "@mui/material";
+import { useNavigate } from "react-router";
+import { paths } from "src/routes/paths";
 // import { NotificationsDrawer } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------
@@ -63,8 +65,18 @@ export function OnboardingLayout({
   const isNavMini = settings.navLayout === "mini";
   const isNavHorizontal = settings.navLayout === "horizontal";
   const isNavVertical = isNavMini || settings.navLayout === "vertical";
+  const handleNavigation = () => {
+    try {
+      navigate(paths.auth.signIn);
+    } catch (error) {
+      console.error('Navigation failed:', error);
+      // Optionally redirect to fallback route
+      navigate('/error');
+    }
+  };
 
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const navigate = useNavigate()
 
   return (
     <LayoutSection
@@ -183,10 +195,9 @@ export function OnboardingLayout({
                     src="/images/job.png"
                     alt="Job Icon"
                     sx={{
-                      height: 27,
+                      height: 24,
                       width: "auto",
                       mr: 2,
-                      mt: 1,
                       ml: 2,
                     }}
                   />
@@ -205,9 +216,8 @@ export function OnboardingLayout({
                     src="/images/rubik.png"
                     alt="Rubik Icon"
                     sx={{
-                      height: 27,
+                      height: 22,
                       width: "auto",
-                      mt: 1,
                       ml: .3,
                     }}
                   />
@@ -218,7 +228,7 @@ export function OnboardingLayout({
             rightArea: (
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 {/* Divider before the Get The App section */}
-                <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+                <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
 
                 {/* Get The App section */}
                 <Box
@@ -233,9 +243,8 @@ export function OnboardingLayout({
                     src="/images/cloud.png"
                     alt="Learning Icon"
                     sx={{
-                      height: 27,
+                      height: 21,
                       width: "auto",
-                      mt: 1,
                     }}
                   />
 
@@ -245,7 +254,7 @@ export function OnboardingLayout({
                 </Box>
 
                 {/* Divider after the Get The App section */}
-                <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+                <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
 
                 {/* Join Now Section */}
                 <Box
@@ -255,11 +264,14 @@ export function OnboardingLayout({
                     alignItems: "center",
                   }}
                 >
-                  <Typography>Join Now</Typography>
+                  <Button onClick={handleNavigation} sx={{borderRadius:2, height:40, fontWeight:770}}>Join Now</Button>
                 </Box>
 
                 {/* Sign In Button */}
-                <Button variant="contained">Sign In</Button>
+                <Box>
+                <Button sx={{ height:49,borderRadius:5,color:"#4285F4", borderColor:"#4285F4", width:"150%"}} variant="outlined" >Sign In clg</Button>
+                
+                </Box>
               </Box>
             ),
           }}

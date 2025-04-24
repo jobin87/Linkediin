@@ -149,7 +149,7 @@ export default function OnBoardingLoginSection() {
             sx={{
               position: "absolute",
               right: "-120px",
-              top: "55%",
+              top: "54%",
               transform: "translateY(-50%)",
               height: "170vh",
               width: "100vw",

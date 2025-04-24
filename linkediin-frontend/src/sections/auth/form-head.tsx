@@ -6,34 +6,22 @@ import Typography from '@mui/material/Typography';
 // ----------------------------------------------------------------------
 
 type FormHeadProps = BoxProps & {
-  icon?: React.ReactNode;
   title: React.ReactNode;
-  description?: React.ReactNode;
 };
 
-export function FormHead({ sx, icon, title, description, ...other }: FormHeadProps) {
+export function FormHead({ sx, title, ...other }: FormHeadProps) {
   return (
     <>
-      {icon && (
-        <Box component="span" display="inline-flex" sx={{ mx: 'auto', mb: 3, py: '5rem 0 ' }}>
-          {icon}
-        </Box>
-  )}
+      
 
       <Box
-        gap={1.5}
         display="flex"
         flexDirection="column"
-        sx={{ mb: 5, textAlign: 'center', whiteSpace: 'pre-line', ...sx }}
+        sx={{ textAlign: 'center', whiteSpace: 'pre-line', ...sx }}
         {...other}
       >
-        <Typography variant="h5">{title}</Typography>
+        <Typography variant="h3" fontWeight={500}>{title}</Typography>
 
-        {description && (
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {description}
-          </Typography>
-        )}
       </Box>
     </>
   );

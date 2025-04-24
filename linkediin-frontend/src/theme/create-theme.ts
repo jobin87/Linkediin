@@ -23,6 +23,7 @@ export function createTheme(
     shape: { borderRadius: 8 },
     components,
     typography: {
+      
       ...typography,
       fontFamily: setFont(settings.fontFamily),
     },

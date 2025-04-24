@@ -18,6 +18,9 @@ import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { Main } from './main';
 import { stylesMode } from 'src/theme/styles';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +36,10 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
   const pathname = usePathname();
 
   const layoutQuery: Breakpoint = 'md';
+    const theme = useTheme();
+  
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+
 
   return (
     <LayoutSection
@@ -44,31 +51,34 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
           disableElevation
           layoutQuery={layoutQuery}
           slotProps={{ container: { maxWidth: false } }}
-          sx={{ position: { [layoutQuery]: 'fixed' }, ...header?.sx }}
+          sx={{ position: { [layoutQuery]: 'relative' }, ...header?.sx }}
           slots={{
-            
-            leftArea: (
-              <>
-                {/* -- Logo -- */}
-                <Logo />
-              </>
-            ),
+                          leftArea: (
+                <>
+                  {/* Conditionally render images based on screen size */}
+                  <Box
+                    component="img"
+                    src={
+                      isLargeScreen ? "/images/linkeddiin.png" : "/images/iin.png"
+                    }
+                    alt="LinkedIn Logo"
+                    sx={{
+                      height: 42,
+                      width: "auto",
+                      ml:5,
+                      mt:2
+                    }}
+                  />
+                </>
+                          ),
             rightArea: (
               <Box display="flex" alignItems="center" gap={{ xs: 1, sm: 1.5 }}>
                 {/* -- Help link -- */}
                 {pathname === paths.onboarding.form && (
                   <SignOutButton sx={{ p: 1 }} variant="text" size="small" />
                 )}
-                <Link
-                  href={paths.faqs}
-                  component={RouterLink}
-                  color="inherit"
-                  sx={{ typography: 'subtitle2', whiteSpace: 'nowrap' }}
-                >
-                  Need help?
-                </Link>
+                
                 {/* -- Settings button -- */}
-                <SettingsButton />
               </Box>
             ),
           }}
@@ -93,7 +103,6 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
-          backgroundImage: `url(${CONFIG.assetsDir}/assets/background/background-3-blur.webp)`,
           [stylesMode.dark]: { opacity: 0.08 },
         },
         ...sx,

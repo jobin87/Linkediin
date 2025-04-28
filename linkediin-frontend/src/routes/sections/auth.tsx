@@ -1,10 +1,11 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthCenteredLayout } from 'src/layouts/auth-centered';
 import { AuthSplitLayout } from 'src/layouts/auth-split';
 
 import { SplashScreen } from 'src/components/loading-screen';
+import { AuthCenteredLayout } from 'src/layouts/auth-centered-login';
+import { AuthCenteredLoginLayout } from 'src/layouts/auth-centered-login/layout';
 
 const SignInPage = lazy(() => import('src/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('src/pages/auth/sign-up'));
@@ -21,24 +22,19 @@ export const authRoutes = [
     ),
     children: [
       {
-        path: 'sign-in',
+        path: 'sign-up',
         element: (
             <AuthCenteredLayout>
-              <SignInPage />
+              <SignUpPage />
             </AuthCenteredLayout>
         ),
       },
       {
-        path: 'sign-up',
+        path: 'sign-in',
         element: (
-            <AuthSplitLayout
-              section={{
-                title: 'Welcome to HosMan... For  yours!',
-                subtitle: 'Your gateway to a seamless and successful health consideration journey',
-              }}
-            >
-              <SignUpPage />
-            </AuthSplitLayout>
+            <AuthCenteredLoginLayout>
+              <SignInPage />
+            </AuthCenteredLoginLayout>
         ),
       },
       // {

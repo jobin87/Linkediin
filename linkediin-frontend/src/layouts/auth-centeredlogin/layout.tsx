@@ -66,28 +66,71 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
                       height: 42,
                       width: "auto",
                       ml:5,
-                      mt:2
                     }}
                   />
                 </>
                           ),
-            rightArea: (
-              <Box display="flex" alignItems="center" gap={{ xs: 1, sm: 1.5 }}>
-                {/* -- Help link -- */}
-                {pathname === paths.onboarding.form && (
-                  <SignOutButton sx={{ p: 1 }} variant="text" size="small" />
-                )}
-                
-                {/* -- Settings button -- */}
-              </Box>
-            ),
+           
           }}
         />
       }
       /** **************************************
        * Footer
        *************************************** */
-      footerSection={null}
+      footerSection={
+        <Box
+          component="footer"
+          sx={{
+            width: '100%',
+            py: 2,
+            px: 3,
+            bgcolor: 'background.paper',
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            textAlign: 'center',
+            fontSize: 13,
+            mt: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Box>LinkedIn© {new Date().getFullYear()}</Box>
+      
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: 1.5,
+            }}
+          >
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              User Agreement
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Privacy Policy
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Community Guidelines
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Cookie Policy
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Copyright Policy
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Send Feedback
+            </Link>
+            <Link component={RouterLink} href="#" color="inherit" underline="hover">
+              Language
+            </Link>
+          </Box>
+        </Box>
+      }
+      
       /** **************************************
        * Style
        *************************************** */
@@ -102,13 +145,15 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
           position: 'fixed',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center center',
           [stylesMode.dark]: { opacity: 0.08 },
+          bgcolor:"#E0D9C9",
         },
         ...sx,
       }}
     >
-      <Main layoutQuery={layoutQuery}>{children}</Main>
+<Main layoutQuery={layoutQuery} sx={{ mb: 2, pb: 0 }}>
+  {children}
+</Main>
     </LayoutSection>
   );
 }

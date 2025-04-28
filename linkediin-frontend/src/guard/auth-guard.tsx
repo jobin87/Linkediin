@@ -34,7 +34,7 @@ export function AuthGuard({ children }: Props) {
   );
 
   const checkPermissions = useCallback(() => {
-    if (!userLogged) {
+    if (userLogged) {
       const href = `${paths.auth.signIn}?${createQueryString('returnTo', pathname)}`;
       router.replace(href);
       return;

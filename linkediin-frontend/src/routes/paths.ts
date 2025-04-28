@@ -34,8 +34,8 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: `${ROOTS.DASHBOARD}`,
-    doctors: {
-      root: `${ROOTS.DASHBOARD}/doctors`,
+    network: {
+      root: `${ROOTS.DASHBOARD}/network`,
     },
 
     patients: {

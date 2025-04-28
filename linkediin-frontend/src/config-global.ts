@@ -19,7 +19,7 @@ export type ConfigValue = {
 // ----------------------------------------------------------------------
 
 export const CONFIG: ConfigValue = {
-  appName: 'hosman',
+  appName: 'linkediin',
   appVersion: packageJson.version,
   baseUrl: import.meta.env.VITE_AUTH_BASE_URL ?? "",
   assetsDir: import.meta.env.VITE_AUTH_ASSETS_DIR ?? '',

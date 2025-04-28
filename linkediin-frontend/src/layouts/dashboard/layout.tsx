@@ -1,38 +1,15 @@
-import type { NavSectionProps } from 'src/components/nav-section';
-import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
-
-import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
+import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { iconButtonClasses } from '@mui/material/IconButton';
+import { useNavigate } from 'react-router';
+import { Typography, useMediaQuery, Box, Avatar, IconButton, Badge } from '@mui/material';
+import type { NavSectionProps } from 'src/components/nav-section';
+import type { Theme, SxProps } from '@mui/material/styles';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
-// import { allLangs } from 'src/locales';
-// import { _contacts, _notifications } from 'src/_mock';
-
-import { Logo } from 'src/components/logo';
-import { SettingsDrawer, useSettingsContext } from 'src/components/settings';
-
-import { Main } from './main';
-import { NavMobile } from './nav-mobile';
-import { layoutClasses } from '../classes';
-import { NavVertical } from './nav-vertical';
-// import { NavHorizontal } from './nav-horizontal';
-import { _account } from '../config-nav-account';
-import { Searchbar } from '../components/searchbar';
-import { _workspaces } from '../config-nav-workspace';
-import { MenuButton } from '../components/menu-button';
+import { useSettingsContext } from 'src/components/settings';
 import { LayoutSection } from '../core/layout-section';
-import { HeaderSection } from '../core/header-section';
-import { StyledDivider, useNavColorVars } from './styles';
-import { AccountDrawer } from '../components/account-drawer';
-// import { LanguagePopover } from '../components/language-popover';
-// import { ContactsPopover } from '../components/contacts-popover';
-// import { WorkspacesPopover } from '../components/workspaces-popover';
-import { navData as dashboardNavData } from '../config-nav-dashboard';
-import { NavHorizontal } from './nav-horizontal';
-// import { NotificationsDrawer } from '../components/notifications-drawer';
+import { Main } from './main';
+import { HeaderSection } from './core/header-section';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -49,162 +26,156 @@ export type DashboardLayoutProps = {
 
 export function DashboardLayout({ sx, children, header, data }: DashboardLayoutProps) {
   const theme = useTheme();
-
-  const mobileNavOpen = useBoolean();
-
+  const navigate = useNavigate();
   const settings = useSettingsContext();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const navColorVars = useNavColorVars(theme, settings);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const layoutQuery: Breakpoint = 'lg';
+  const navItems = [
+    { label: 'Home', icon: '/images/components/home.svg', path: paths.dashboard.root },
+    { label: 'My Network', icon: '/images/components/mynetwork.svg', path: paths.dashboard.network.root },
+    { label: 'Jobs', icon: '/images/components/job.svg', path: '/jobs' },
+    { label: 'Messages', icon: '/images/components/message.svg', path: '/messages' },
+    { label: 'Notifications', icon: '/images/components/notification.svg', path: '/notifications' },
+  ];
 
-  const navData = data?.nav ?? dashboardNavData();
-
-  const isNavMini = settings.navLayout === 'mini';
-  const isNavHorizontal = settings.navLayout === 'horizontal';
-  const isNavVertical = isNavMini || settings.navLayout === 'vertical';
+  const handleItemClick = (index: number, path: string) => {
+    setActiveIndex(index);
+    navigate(path);
+  };
 
   return (
     <LayoutSection
-      /** **************************************
-       * Header
-       *************************************** */
       headerSection={
         <HeaderSection
-          layoutQuery={layoutQuery}
-          disableElevation={isNavVertical}
+          layoutQuery="lg"
           slotProps={{
             toolbar: {
               sx: {
-                ...(isNavHorizontal && {
-                  bgcolor: 'var(--layout-nav-bg)',
-                  [`& .${iconButtonClasses.root}`]: {
-                    color: 'var(--layout-nav-text-secondary-color)',
-                  },
-                  [theme.breakpoints.up(layoutQuery)]: {
-                    height: 'var(--layout-nav-horizontal-height)',
-                  },
-                }),
+                [theme.breakpoints.up('lg')]: {
+                  height: '56px',
+                },
               },
             },
-            container: {
-              maxWidth: false,
-              sx: {
-                ...(isNavVertical && { px: { [layoutQuery]: 5 } }),
-              },
-            },
+            container: { maxWidth: false },
           }}
           sx={header?.sx}
           slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
-            bottomArea: isNavHorizontal ? (
-              <NavHorizontal
-                data={navData}
-                layoutQuery={layoutQuery}
-                cssVars={navColorVars.section}
-              />
-            ) : null,
             leftArea: (
-              <>
-                {/* -- Nav mobile -- */}
-                <MenuButton
-                  onClick={mobileNavOpen.onTrue}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml:7 }}>
+                <Box
+                  component="img"
+                  src="/images/iin.png"
+                  alt="LinkedIn Logo"
+                  sx={{ height: 32, width: 'auto' }}
+                />
+                <Box
+                  component="input"
+                  type="text"
+                  placeholder="Search"
                   sx={{
-                    mr: 1,
-                    ml: -1,
-                    [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
+                    height: 36,
+                    width: 280,
+                    px: 2,
+                    borderRadius: 1,
+                    border: '1px solid',
+                    borderColor: 'grey.300',
+                    fontSize: 14,
+                    outline: 'none',
+                    '&:focus': {
+                      borderColor: 'primary.main',
+                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.light}`,
+                    },
                   }}
                 />
-                <NavMobile
-                  data={navData}
-                  open={mobileNavOpen.value}
-                  onClose={mobileNavOpen.onFalse}
-                  cssVars={navColorVars.section}
-                />
-                {/* -- Logo -- */}
-                {isNavHorizontal && (
-                  <Logo
+              </Box>
+            ),
+            centerArea: (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.6, position: 'relative' }}>
+                {navItems.map((item, index) => (
+                  <Box
+                    key={item.label}
+                    onClick={() => handleItemClick(index, item.path)}
                     sx={{
-                      display: 'none',
-                      [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      position: 'relative',
+                      px: 1.2,
+                      color: activeIndex === index ? 'black' : 'text.disabled',
+                      '&:hover': {
+                        color: 'black',
+                      },
                     }}
-                  />
-                )}
-                {/* -- Divider -- */}
-                {isNavHorizontal && (
-                  <StyledDivider
-                    sx={{ [theme.breakpoints.up(layoutQuery)]: { display: 'flex' } }}
-                  />
-                )}
-                {/* -- Workspace popover -- */}
-                
-               <Searchbar data={navData} />
-              </>
+                  >
+                    <Box
+                      component="img"
+                      src={item.icon}
+                      alt={item.label}
+                      sx={{
+                        height: 24,
+                        width: 'auto',
+                        filter: activeIndex === index
+                          ? 'brightness(0) saturate(100%)'
+                          : 'brightness(0) saturate(0%) opacity(0.6)',
+                        transition: 'filter 0.3s',
+                      }}
+                    />
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        fontWeight: activeIndex === index ? 500 : 300,
+                        mt: 0.5,
+                      }}
+                    >
+                      {item.label}
+                    </Typography>
+
+                    {/* Bottom Line */}
+                    {activeIndex === index && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: -2,
+                          height: 2,
+                          width: 64,
+                          bgcolor: 'black',
+                          borderRadius: 1,
+                          transition: 'all 0.3s ease',
+                        }}
+                      />
+                    )}
+                  </Box>
+                ))}
+              </Box>
             ),
             rightArea: (
-              <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
-                <SettingsDrawer/>
-                <AccountDrawer data={_account} />
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Badge badgeContent={3} color="error">
+                  <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
+                </Badge>
+                <IconButton>
+                  <Box
+                    component="img"
+                    src="/images/components/grid_icon.svg"
+                    alt="Work"
+                    sx={{ height: 24, width: 24 }}
+                  />
+                </IconButton>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Try Premium
+                </Typography>
               </Box>
             ),
           }}
         />
       }
-      /** **************************************
-       * Sidebar
-       *************************************** */
-      sidebarSection={
-        isNavHorizontal ? null : (
-          <NavVertical
-            data={navData}
-            isNavMini={isNavMini}
-            layoutQuery={layoutQuery}
-            cssVars={navColorVars.section}
-            onToggleNav={() =>
-              settings.onUpdateField(
-                'navLayout',
-                settings.navLayout === 'vertical' ? 'mini' : 'vertical'
-              )
-            }
-          />
-        )
-      }
-      /** **************************************
-       * Footer
-       *************************************** */
-      footerSection={null}
-      /** **************************************
-       * Style
-       *************************************** */
-      cssVars={{
-        ...navColorVars.layout,
-        '--layout-transition-easing': 'linear',
-        '--layout-transition-duration': '120ms',
-        '--layout-nav-mini-width': '88px',
-        '--layout-nav-vertical-width': '300px',
-        '--layout-nav-horizontal-height': '64px',
-        '--layout-dashboard-content-pt': theme.spacing(1),
-        '--layout-dashboard-content-pb': theme.spacing(8),
-        '--layout-dashboard-content-px': theme.spacing(5),
-      }}
-      sx={{
-        [`& .${layoutClasses.hasSidebar}`]: {
-          [theme.breakpoints.up(layoutQuery)]: {
-            transition: theme.transitions.create(['padding-left'], {
-              easing: 'var(--layout-transition-easing)',
-              duration: 'var(--layout-transition-duration)',
-            }),
-            pl: isNavMini ? 'var(--layout-nav-mini-width)' : 'var(--layout-nav-vertical-width)',
-          },
-        },
-        ...sx,
-      }}
     >
-      <Main isNavHorizontal={isNavHorizontal}>{children}</Main>
+      <Main isNavHorizontal={settings.navLayout === 'horizontal'}>
+        {children}
+      </Main>
     </LayoutSection>
   );
 }

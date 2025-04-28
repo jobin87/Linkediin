@@ -34,6 +34,14 @@ export function RHFTextField({ name, helperText, type, ...other }: Props) {
           helperText={error?.message ?? helperText}
           inputProps={{
             autoComplete: 'off',
+            style: { height: '20px' }, // ✅ Reduced height here
+          }}
+          sx={{
+            '& .MuiInputBase-root': {
+              height: '30px', // Adjust the height of the input field
+              padding: '0 14px', // Optional: Adjust padding to fine-tune the height
+            },
+            ...other.sx, // Keep other sx props intact if passed
           }}
           {...other}
         />
@@ -41,3 +49,4 @@ export function RHFTextField({ name, helperText, type, ...other }: Props) {
     />
   );
 }
+

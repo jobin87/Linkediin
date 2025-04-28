@@ -35,7 +35,7 @@ export function AuthGuard({ children }: Props) {
 
   const checkPermissions = useCallback(() => {
     if (!userLogged) {
-      const href = `${paths.auth.signIn}?${createQueryString('returnTo', pathname)}`;
+      const href = `${paths.onboarding.root}?${createQueryString('returnTo', pathname)}`;
       router.replace(href);
       return;
     }
@@ -48,7 +48,7 @@ export function AuthGuard({ children }: Props) {
       }
 
       if (userDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
-        router.replace(paths.onboarding.root);
+        router.replace(paths.auth.signIn);
         setIsChecking(false);
         return;
       }
@@ -59,7 +59,7 @@ export function AuthGuard({ children }: Props) {
           setIsChecking(false);
           return;
         } else {
-          router.replace(paths.onboarding.form);
+          router.replace(paths.onboarding.root);
           setIsChecking(false);
           return;
         }

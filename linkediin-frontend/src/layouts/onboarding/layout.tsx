@@ -37,6 +37,8 @@ import { HeaderSection } from "./core/header-section";
 import { Button, Divider, Typography, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
 import { paths } from "src/routes/paths";
+import PrintIcon from '@mui/icons-material/Print';
+
 // import { NotificationsDrawer } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------
@@ -67,7 +69,16 @@ export function OnboardingLayout({
   const isNavVertical = isNavMini || settings.navLayout === "vertical";
   const handleNavigation = () => {
     try {
-      navigate(paths.auth.signIn);
+      navigate(paths.auth.signUp);
+    } catch (error) {
+      console.error('Navigation failed:', error);
+      // Optionally redirect to fallback route
+      navigate('/error');
+    }
+  };
+  const handleSigninNavigation = () => {
+    try {
+      navigate(paths.dashboard.root);
     } catch (error) {
       console.error('Navigation failed:', error);
       // Optionally redirect to fallback route
@@ -240,10 +251,10 @@ export function OnboardingLayout({
                 >
                   <Box
                     component="img"
-                    src="/images/cloud.png"
+                    src="/images/cloud.svg"
                     alt="Learning Icon"
                     sx={{
-                      height: 21,
+                      height: 31,
                       width: "auto",
                     }}
                   />
@@ -269,7 +280,7 @@ export function OnboardingLayout({
 
                 {/* Sign In Button */}
                 <Box>
-                <Button sx={{ height:49,borderRadius:5,color:"#4285F4", borderColor:"#4285F4", width:"150%"}} variant="outlined" >Sign In clg</Button>
+                <Button  onClick={handleSigninNavigation}  sx={{ height:49,borderRadius:5,color:"#4285F4", borderColor:"#4285F4", width:"150%"}} variant="outlined" >Sign In</Button>
                 
                 </Box>
               </Box>
@@ -306,6 +317,7 @@ export function OnboardingLayout({
               ? "var(--layout-nav-mini-width)"
               : "var(--layout-nav-vertical-width)",
           },
+          mb:3
         },
         ...sx,
       }}

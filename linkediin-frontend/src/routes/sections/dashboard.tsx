@@ -20,8 +20,9 @@ import ReportDetailsPage from 'src/sections/reports/report-details';
 import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
 import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
 import { useUser } from 'src/hooks/use-user';
-import { Doctors } from 'src/sections/doctors/view/doctors';
 import StaffDetailsPage from 'src/sections/allStaff-Management/staff-details';
+import { Home } from 'src/sections/home/view/home';
+import { NetworkPage } from 'src/sections/home copy/view/network';
 
 const IndexPage = lazy(() => import('src/pages/home'));
 
@@ -60,22 +61,16 @@ const DashboardRoutesWrapper = () => {
         path: 'dashboard',
         element: <AuthGuard>{layoutContent}</AuthGuard>,
         children: [
-          { element: isManager ? <IndexPage /> : <AppointMentListPage />, index: true }, // Dynamic default page
+          { element: <Home />, index: true }, // Dynamic default page
           {
-            path: 'appointment',
+            path: 'network',
             children: [
-              { path: 'appointmentList', element: <AppointMentListPage /> },
+              { element: <NetworkPage/>, index: true },
               { path: 'department/:id', element: <DepartmentDetails /> },
               { path: 'appointment-form', element: <FormDetails /> },
             ],
           },
-          {
-            path: 'doctors',
-            children: [
-              { element: <Doctors/>, index: true },
-
-            ],
-          },
+          
           {
             path: 'patients',
             children: [

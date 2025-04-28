@@ -13,7 +13,7 @@ import { useScrollOffSetTop } from "src/hooks/use-scroll-offset-top";
 
 import { bgBlur, varAlpha } from "src/theme/styles";
 
-import { layoutClasses } from "../classes";
+import { layoutClasses } from "../../classes";
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ export function HeaderSection({
   const toolbarStyles = {
     default: {
       minHeight: "auto",
-      height: "var(--layout-header-mobile-height)",
+      height: 10,
       transition: theme.transitions.create(["height", "background-color"], {
         easing: theme.transitions.easing.easeInOut,
         duration: theme.transitions.duration.shorter,
@@ -113,16 +113,15 @@ export function HeaderSection({
             display: "flex",
             alignItems: "center",
             ...slotProps?.container?.sx,
-            ml:7
           }}
         >
-          {slots?.leftArea}
-
-          <Box
-            sx={{ display: "flex", flex: "1 1 auto", justifyContent: "center", ml:38 }}
-          >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 15 }}>
+            {slots?.leftArea}
             {slots?.centerArea}
+
           </Box>
+
+          <Box sx={{ flexGrow: 1 }} />
 
           {slots?.rightArea}
         </Container>

@@ -15,7 +15,7 @@ const layoutContent = (
 export const onboardingRoutes = [
   {
     path: 'onboarding',
-    element: <AuthGuard>{layoutContent}</AuthGuard>,
+    element: layoutContent,
     children: [
       { element: <HomePage />, index: true }  // Use HomePage component correctly
     ],

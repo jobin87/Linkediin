@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
+import { CenteredSignUpView } from 'src/sections/auth/view';
 
 import { SignUpView } from 'src/sections/auth/view/sign-up-view';
 
@@ -14,8 +15,8 @@ export default function Page() {
       <Helmet>
         <title> {metadata.title}</title>
       </Helmet>
+      <CenteredSignUpView/>
 
-      <SignUpView/>
     </>
   );
 }

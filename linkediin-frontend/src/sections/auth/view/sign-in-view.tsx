@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
+import Divider from "@mui/material/Divider";
 
 import { RouterLink } from "src/routes/components";
 import { paths } from "src/routes/paths";
@@ -26,6 +27,8 @@ import useUniqueBrowserId from "src/hooks/use-browser-id";
 import { FormHead } from "../form-head";
 import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, FormControlLabel, Typography } from "@mui/material";
+import { GoogleIcon } from "src/assets/icons";
+import { FaMicrosoft } from "react-icons/fa";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +47,7 @@ export const SignInSchema = zod.object({
   remember: zod.boolean().optional(),
 });
 
-export function CenteredSignInView() {
+export function CenteredSignUpView() {
   const password = useBoolean();
   const dispatch = useAppDispatch();
   const uniqueBrowserId = useUniqueBrowserId();
@@ -66,7 +69,6 @@ export function CenteredSignInView() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-  // console.log(errors);
 
   const getClientIp = async () => {
     try {
@@ -87,8 +89,7 @@ export function CenteredSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     const ipaddress = await getClientIp();
-    console.log(ipaddress);
-    if (await ipaddress) {
+    if (ipaddress) {
       try {
         const response = await dispatch(
           requestSignInWithPassword({
@@ -100,7 +101,6 @@ export function CenteredSignInView() {
         );
         if (response.payload) {
           navigate(paths.onboarding.root);
-          console.log("1");
         }
       } catch (error) {
         console.error(error);
@@ -110,71 +110,63 @@ export function CenteredSignInView() {
     }
   });
 
-  const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: "auto" }} />;
-
   const renderForm = (
-    <Box gap={3} display="flex" flexDirection="column">
-      <Field.Text
-        name="email"
-        {...methods.register}
-        label="Email address"
-        InputLabelProps={{ shrink: true }}
-      />
+    <Box gap={1} display="flex" flexDirection="column">
+      <Box ml="1%" mt="5%">
+        <Typography>Email or Phone number</Typography>
+        <Field.Text
+          name="email"
+          {...methods.register}
+          InputLabelProps={{ shrink: true }}
+        />
+      </Box>
 
-      <Box gap={1.5} display="flex" flexDirection="column">
+      <Box gap={1} display="flex" flexDirection="column" ml="1%">
+        <Typography>Password</Typography>
         <Field.Text
           name="password"
-          label="Password"
           {...methods.register}
           placeholder="6+ characters"
           type={password.value ? "text" : "password"}
           InputLabelProps={{ shrink: true }}
           InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify
-                    icon={
-                      password.value
-                        ? "solar:eye-bold"
-                        : "solar:eye-closed-bold"
-                    }
-                  />
-                </IconButton>
-              </InputAdornment>
-            ),
+            endAdornment: <InputAdornment position="end"></InputAdornment>,
           }}
         />
       </Box>
+
       <FormControlLabel
         control={
           <Checkbox
             {...methods.register("remember")}
             color="primary"
-            size="small" // ← this shrinks the checkbox
+            size="small"
           />
         }
         label="Remember me"
-        sx={{ fontSize: 14, width: "8.8rem", ml: 2 }} // optional: adjust label size
+        sx={{ fontSize: 14, width: "8.8rem", ml: "1%" }}
       />
 
       <Box
         sx={{
-          width: "90%",
+          width: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          mx: "auto", // ← this centers it horizontally
           borderRadius: 1,
+          mt: 2,
+          textAlign: "center",
+          flexDirection: "column",
         }}
       >
-        <Typography variant="caption" align="center">
-          By clicking Agree & Join or Continue, you agree to the LinkedIn&nbsp;
-          <Link href="#" underline="always" >
+        <Typography variant="caption">
+          By clicking Agree & Join or Continue, you agree to the LinkedIn
+          <br />
+          <Link href="#" underline="always">
             User Agreement
           </Link>
           ,&nbsp;
-          <Link href="#" underline="always" >
+          <Link href="#" underline="always">
             Privacy Policy
           </Link>
           , and&nbsp;
@@ -192,38 +184,136 @@ export function CenteredSignInView() {
         type="submit"
         variant="contained"
         loading={isSubmitting}
+        sx={{ mt: 2, borderRadius: 4, bgcolor:"#4285F4" }}
       >
         Agree And Join
       </LoadingButton>
+
+      {/* Divider with "or" */}
+      <Divider
+        sx={{
+          my: 1,
+          width: "100%",
+          "&::before, &::after": {
+            borderColor: "text.secondary",
+          },
+        }}
+      >
+        or
+      </Divider>
+
+      {/* Google Sign In */}
+      <Box sx={{    display:"flex",
+            alignItems:"center",
+            justifyContent:"center"}}>
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: 3,
+            width: "90%",
+            textTransform: "none",
+            bgcolor: "white",
+            color:"black",
+            border:"2px solid"
+        
+          
+          }}
+          startIcon={
+            <Box
+              sx={{
+                backgroundColor: "white",
+                borderRadius: "50%",
+                padding: "5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <GoogleIcon />
+            </Box>
+          }
+        >
+          Continue with Google
+        </Button>
+      </Box>
+
+      {/* Microsoft Sign In */}
+      <Box  sx={{    display:"flex",
+            alignItems:"center",
+            justifyContent:"center"}}>
+        <Button
+          variant="outlined"
+          sx={{
+            borderRadius: 3,
+            width: "90%",
+            textTransform: "none",
+            bgcolor: "white",
+            color: "black",
+            border: "2px solid #000",
+          }}
+          startIcon={
+            <Box
+              sx={{
+                borderRadius: "50%",
+                padding: "5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FaMicrosoft />
+            </Box>
+          }
+        >
+          Continue with Microsoft
+        </Button>
+      </Box>
+      {/* Already have an account */}
+<Box mt={3} textAlign="center" mb={4}>
+  <Typography variant="body2">
+    Already on LinkedIn?{" "}
+    <Link>
+      Sign in
+    </Link>
+  </Typography>
+</Box>
+
     </Box>
   );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <FormHead title="Make the most of your professional life" />
-
+    <Box>
+      <FormHead sx={{mb:3}} title="Make the most of your professional life" />
       <Box
         sx={{
-          py: 8,
-          width: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          bgcolor: "background.default",
-          maxWidth: "var(--layout-auth-content-width)",
-          border: "2px solid",
         }}
       >
-        <Form methods={methods} onSubmit={onSubmit}>
-          {renderForm}
-        </Form>
+        <Box
+          sx={{
+            width: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            bgcolor: "background.default",
+            maxWidth: "var(--layout-auth-content-width)",
+            borderRadius: 1,
+            
+          }}
+        > 
+          <Form methods={methods} onSubmit={onSubmit}>
+            {renderForm}
+          </Form>
+          
+        </Box>
       </Box>
+<Box textAlign="center" sx={{mt:3}}>
+Looking to create a page for a business? Get help
+
+  </Box>
+
     </Box>
   );
 }

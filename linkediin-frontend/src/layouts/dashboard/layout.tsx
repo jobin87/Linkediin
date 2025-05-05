@@ -1,17 +1,26 @@
-import { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router';
-import { Typography, useMediaQuery, Box, Avatar, IconButton, Badge } from '@mui/material';
-import type { NavSectionProps } from 'src/components/nav-section';
-import type { Theme, SxProps } from '@mui/material/styles';
+import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router";
+import {
+  Typography,
+  useMediaQuery,
+  Box,
+  Avatar,
+  IconButton,
+  Paper,
+  ClickAwayListener,
+} from "@mui/material";
+import { Stack } from "@mui/material";
+import { ArrowDropDown } from "@mui/icons-material";
 
-import { useSettingsContext } from 'src/components/settings';
-import { LayoutSection } from '../core/layout-section';
-import { Main } from './main';
-import { HeaderSection } from './core/header-section';
-import { paths } from 'src/routes/paths';
+import type { NavSectionProps } from "src/components/nav-section";
+import type { Theme, SxProps } from "@mui/material/styles";
 
-// ----------------------------------------------------------------------
+import { useSettingsContext } from "src/components/settings";
+import { LayoutSection } from "../core/layout-section";
+import { Main } from "./main";
+import { HeaderSection } from "./core/header-section";
+import { paths } from "src/routes/paths";
 
 export type DashboardLayoutProps = {
   sx?: SxProps<Theme>;
@@ -20,30 +29,71 @@ export type DashboardLayoutProps = {
     sx?: SxProps<Theme>;
   };
   data?: {
-    nav?: NavSectionProps['data'];
+    nav?: NavSectionProps["data"];
   };
 };
 
-export function DashboardLayout({ sx, children, header, data }: DashboardLayoutProps) {
+export function DashboardLayout({
+  sx,
+  children,
+  header,
+  data,
+}: DashboardLayoutProps) {
   const theme = useTheme();
   const navigate = useNavigate();
   const settings = useSettingsContext();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const navItems = [
-    { label: 'Home', icon: '/images/components/home.svg', path: paths.dashboard.root },
-    { label: 'My Network', icon: '/images/components/mynetwork.svg', path: paths.dashboard.network.root },
-    { label: 'Jobs', icon: '/images/components/job.svg', path: '/jobs' },
-    { label: 'Messages', icon: '/images/components/message.svg', path: '/messages' },
-    { label: 'Notifications', icon: '/images/components/notification.svg', path: '/notifications' },
-  ];
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleItemClick = (index: number, path: string) => {
     setActiveIndex(index);
     navigate(path);
   };
+
+  const handleToggleMenu = () => {
+    setShowMenu((prev) => !prev);
+  };
+
+  const handleViewProfile = () => {
+    navigate("/profile"); // replace with actual route
+    setShowMenu(false);
+  };
+
+  const handleSignOut = () => {
+    console.log("Sign out");
+    // implement sign-out logic
+    setShowMenu(false);
+  };
+
+  const handleClickAway = () => {
+    setShowMenu(false);
+  };
+
+  const navItems = [
+    {
+      label: "Home",
+      icon: "/images/components/home.svg",
+      path: paths.dashboard.root,
+    },
+    {
+      label: "My Network",
+      icon: "/images/components/mynetwork.svg",
+      path: paths.dashboard.network.root,
+    },
+    { label: "Jobs", icon: "/images/components/job.svg", path: "/jobs" },
+    {
+      label: "Messages",
+      icon: "/images/components/message.svg",
+      path: "/messages",
+    },
+    {
+      label: "Notifications",
+      icon: "/images/components/notification.svg",
+      path: "/notifications",
+    },
+  ];
 
   return (
     <LayoutSection
@@ -53,8 +103,8 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
           slotProps={{
             toolbar: {
               sx: {
-                [theme.breakpoints.up('lg')]: {
-                  height: '56px',
+                [theme.breakpoints.up("lg")]: {
+                  height: "56px",
                 },
               },
             },
@@ -63,12 +113,12 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
           sx={header?.sx}
           slots={{
             leftArea: (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml:7 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, ml: 7 }}>
                 <Box
                   component="img"
                   src="/images/iin.png"
                   alt="LinkedIn Logo"
-                  sx={{ height: 32, width: 'auto' }}
+                  sx={{ height: 32, width: "auto" }}
                 />
                 <Box
                   component="input"
@@ -79,34 +129,42 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
                     width: 280,
                     px: 2,
                     borderRadius: 1,
-                    border: '1px solid',
-                    borderColor: 'grey.300',
+                    border: "1px solid",
+                    borderColor: "grey.300",
                     fontSize: 14,
-                    outline: 'none',
-                    '&:focus': {
-                      borderColor: 'primary.main',
-                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.light}`,
+                    outline: "none",
+                    "&:focus": {
+                      borderColor: "primary.main",
+                      boxShadow: (theme) =>
+                        `0 0 0 2px ${theme.palette.primary.light}`,
                     },
                   }}
                 />
               </Box>
             ),
             centerArea: (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.6, position: 'relative' }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.6,
+                  position: "relative",
+                }}
+              >
                 {navItems.map((item, index) => (
                   <Box
                     key={item.label}
                     onClick={() => handleItemClick(index, item.path)}
                     sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      position: 'relative',
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      position: "relative",
                       px: 1.2,
-                      color: activeIndex === index ? 'black' : 'text.disabled',
-                      '&:hover': {
-                        color: 'black',
+                      color: activeIndex === index ? "black" : "text.disabled",
+                      "&:hover": {
+                        color: "black",
                       },
                     }}
                   >
@@ -116,11 +174,12 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
                       alt={item.label}
                       sx={{
                         height: 24,
-                        width: 'auto',
-                        filter: activeIndex === index
-                          ? 'brightness(0) saturate(100%)'
-                          : 'brightness(0) saturate(0%) opacity(0.6)',
-                        transition: 'filter 0.3s',
+                        width: "auto",
+                        filter:
+                          activeIndex === index
+                            ? "brightness(0) saturate(100%)"
+                            : "brightness(0) saturate(0%) opacity(0.6)",
+                        transition: "filter 0.3s",
                       }}
                     />
                     <Typography
@@ -132,38 +191,92 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
                     >
                       {item.label}
                     </Typography>
-
-                    {/* Bottom Line */}
                     {activeIndex === index && (
                       <Box
                         sx={{
-                          position: 'absolute',
+                          position: "absolute",
                           bottom: -2,
                           height: 2,
                           width: 64,
-                          bgcolor: 'black',
+                          bgcolor: "black",
                           borderRadius: 1,
-                          transition: 'all 0.3s ease',
+                          transition: "all 0.3s ease",
                         }}
                       />
                     )}
                   </Box>
                 ))}
+
+                {/* Me Button and Dropdown */}
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <Box sx={{ position: "relative" }}>
+                    <Box
+                      onClick={handleToggleMenu}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        color: activeIndex === 5 ? "text.primary" : "text.secondary",
+                        "&:hover": {
+                          color: "text.primary",
+                        },
+                      }}
+                    >
+                      <Avatar sx={{ width: 24, height: 24, mb: "2px" }} src="">
+                        U
+                      </Avatar>
+                      <Stack direction="row" alignItems="center" spacing={0.5}>
+                        <Typography variant="caption">Me</Typography>
+                        <ArrowDropDown fontSize="small" />
+                      </Stack>
+                    </Box>
+
+                    {showMenu && (
+                      <Box
+                        component={Paper}
+                        elevation={3}
+                        sx={{
+                          position: "absolute",
+                          top: 48,
+                          right: 0,
+                          minWidth: 180,
+                          zIndex: 10,
+                          p: 1.5,
+                        }}
+                      >
+                        <Typography variant="subtitle2" gutterBottom>
+                          Welcome, User
+                        </Typography>
+                        <Box
+                          onClick={handleViewProfile}
+                          sx={{
+                            py: 1,
+                            cursor: "pointer",
+                            "&:hover": { color: "primary.main" },
+                          }}
+                        >
+                          View Profile
+                        </Box>
+                        <Box
+                          onClick={handleSignOut}
+                          sx={{
+                            py: 1,
+                            cursor: "pointer",
+                            "&:hover": { color: "primary.main" },
+                          }}
+                        >
+                          Sign Out
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                </ClickAwayListener>
               </Box>
             ),
             rightArea: (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Badge badgeContent={3} color="error">
-                  <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
-                </Badge>
-                <IconButton>
-                  <Box
-                    component="img"
-                    src="/images/components/grid_icon.svg"
-                    alt="Work"
-                    sx={{ height: 24, width: 24 }}
-                  />
-                </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>
                   Try Premium
                 </Typography>
@@ -173,7 +286,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
         />
       }
     >
-      <Main isNavHorizontal={settings.navLayout === 'horizontal'}>
+      <Main isNavHorizontal={settings.navLayout === "horizontal"}>
         {children}
       </Main>
     </LayoutSection>

@@ -59,7 +59,7 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
                   <Box
                     component="img"
                     src={
-                      isLargeScreen ? "/images/linkeddiin.png" : "/images/iin.png"
+                      isLargeScreen ? "/images/inlinkediin.png" : "/images/iin.png"
                     }
                     alt="LinkedIn Logo"
                     sx={{
@@ -146,7 +146,7 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           [stylesMode.dark]: { opacity: 0.08 },
-          bgcolor:"#E0D9C9",
+          bgcolor:"#F3F2EF",
         },
         ...sx,
       }}

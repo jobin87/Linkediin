@@ -37,21 +37,10 @@ export const paths = {
     network: {
       root: `${ROOTS.DASHBOARD}/network`,
     },
-
-    patients: {
-      root: `${ROOTS.DASHBOARD}/patients`,
-      patientForm: `${ROOTS.DASHBOARD}/patients/patient-Form`,
-      security: `${ROOTS.DASHBOARD}/user/security`,
-      general: `${ROOTS.DASHBOARD}/user/general`,
+    profile: {
+      root: `${ROOTS.DASHBOARD}/profile`,
     },
-    Appointment: {
-      list:`${ROOTS.DASHBOARD}/appointment/appointmentList`,
-      department: `${ROOTS.DASHBOARD}/appointment/department/:id`,
-      form: `${ROOTS.DASHBOARD}/appointment/appointment-form`,
-
-      
     
-    },
     Treatment: {
       root: `${ROOTS.DASHBOARD}/treatment`,
       newTreatMents: `${ROOTS.DASHBOARD}/treatment/add-treatments`,

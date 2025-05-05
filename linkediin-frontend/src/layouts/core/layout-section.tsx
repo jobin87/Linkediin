@@ -35,6 +35,7 @@ export function LayoutSection({
           '--layout-header-mobile-height': '64px',
           '--layout-header-desktop-height': '72px',
           ...cssVars,
+          
         },
       }}
     />

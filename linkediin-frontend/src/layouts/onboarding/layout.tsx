@@ -85,7 +85,6 @@ export function OnboardingLayout({
       navigate('/error');
     }
   };
-
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
   const navigate = useNavigate()
 

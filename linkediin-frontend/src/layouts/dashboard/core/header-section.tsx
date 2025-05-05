@@ -115,7 +115,7 @@ export function HeaderSection({
             ...slotProps?.container?.sx,
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 15 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 13 }}>
             {slots?.leftArea}
             {slots?.centerArea}
 

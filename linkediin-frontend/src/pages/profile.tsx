@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
-import AppointmentListView from 'src/sections/appointment/view/appointment-list-view';
+import { ProfileView } from 'src/sections/profile/view';
 
-const metadata = { title: `All Staff | Staff | Settings - ${CONFIG.appName}` };
+
+// ----------------------------------------------------------------------
+
+const metadata = { title: `Home | Dashboard - ${CONFIG.appName}` };
 
 export default function Page() {
   return (
@@ -12,7 +15,7 @@ export default function Page() {
         <title> {metadata.title}</title>
       </Helmet>
 
-      <AppointmentListView/>
+      <ProfileView/>
     </>
   );
 }

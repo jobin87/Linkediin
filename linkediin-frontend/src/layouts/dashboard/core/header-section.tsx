@@ -66,7 +66,7 @@ export function HeaderSection({
   const toolbarStyles = {
     default: {
       minHeight: "auto",
-      height: 10,
+      height: 7,
       transition: theme.transitions.create(["height", "background-color"], {
         easing: theme.transitions.easing.easeInOut,
         duration: theme.transitions.duration.shorter,

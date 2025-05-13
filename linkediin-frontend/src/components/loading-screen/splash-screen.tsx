@@ -30,7 +30,7 @@ export function SplashScreen({ portal = true, sx, ...other }: Props) {
         }}
         {...other}
       >
-        <AnimateLogo1 />
+        linkediin
       </Box>
     </Box>
   );

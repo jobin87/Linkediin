@@ -2,7 +2,7 @@ import { Box, Card, CardContent, Typography, TextField, Button } from '@mui/mate
 
 export function DashboardMiddle() {
   return (
-    <Box sx={{ flex: 1, p: 2, maxWidth: 600 }}>
+    <Box sx={{ flex: 1, p: 2, maxWidth: 500 }}>
       {/* Start a Post */}
       <Card sx={{ mb: 2 }}>
         <CardContent>

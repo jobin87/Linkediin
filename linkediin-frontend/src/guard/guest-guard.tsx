@@ -6,6 +6,7 @@ import { CONFIG } from 'src/config-global';
 
 import { SplashScreen } from 'src/components/loading-screen';
 import { useUser } from 'src/hooks/use-user';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,7 @@ export function GuestGuard({ children }: Props) {
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
-  const returnTo = searchParams.get('returnTo') || CONFIG.auth.redirectPath;
+  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
 
   const checkPermissions = useCallback(async (): Promise<void> => {
     if (userLogged) {

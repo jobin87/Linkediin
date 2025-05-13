@@ -2,7 +2,7 @@ import { Box, Typography, Button, Divider } from '@mui/material';
 
 export function DashboardLeft() {
   return (
-    <Box sx={{ width: 280, p: 2 }}>
+    <Box sx={{ width: 280, p: 1 ,ml:3}}>
       {/* Profile Card */}
       <Box sx={{ bgcolor: 'background.paper', borderRadius: 2, overflow: 'hidden', mb: 2, boxShadow: 1 }}>
         <Box

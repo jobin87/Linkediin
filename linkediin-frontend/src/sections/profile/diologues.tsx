@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,6 +7,8 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton,
+  Box,
 } from "@mui/material";
 import { DialogActions } from "@mui/material";
 
@@ -44,6 +46,8 @@ export const EditJobPreferencesDialog = ({
   </Dialog>
 );
 
+
+
 export const EditBusinessDialog = ({
   openBox2,
   onCloseBox2,
@@ -72,62 +76,136 @@ export const EditBusinessDialog = ({
 export const EditAboutDialog = ({
   openAbout,
   onCloseAbout,
+  aboutText,
+  setAboutText,
 }: {
   openAbout: boolean;
   onCloseAbout: () => void;
-}) => (
-  <>
-    {/* About Dialog */}
+  aboutText: string;
+  setAboutText: (text: string) => void;
+}) => {
+  const [localText, setLocalText] = useState("");
+
+  useEffect(() => {
+    if (openAbout) setLocalText(aboutText);
+  }, [openAbout, aboutText]);
+
+  const handleSave = () => {
+    setAboutText(localText);
+    onCloseAbout();
+  };
+
+  return (
     <Dialog open={openAbout} onClose={onCloseAbout} maxWidth="sm" fullWidth>
       <DialogTitle>Edit About</DialogTitle>
       <DialogContent>
         <Paper sx={{ p: 2 }}>
           <Typography fontWeight="bold">* Indicates required</Typography>
-          <Typography mt={2}>About *</Typography>
-          <Typography>
-            I am a passionate developer specializing in full-stack web
-            development. I love building performant and user-focused
-            applications using React, Node, and MongoDB.
+          <Typography mt={2} mb={1}>
+            About *
           </Typography>
+
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            placeholder="Write something about yourself..."
+            value={localText}
+            onChange={(e) => setLocalText(e.target.value)}
+          />
         </Paper>
       </DialogContent>
+
+      <DialogActions>
+        <Button onClick={onCloseAbout}>Cancel</Button>
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          disabled={!localText.trim()}
+        >
+          Save
+        </Button>
+      </DialogActions>
     </Dialog>
-  </>
-);
+  );
+};
+
 
 export const CreatePostDialog = ({
+  postText,
+  setPostText,
+  media,
+  setMedia,
   openCreatePost,
   onClosecreatePost,
+  onSavePost,
 }: {
+  postText: string;
+  setPostText: (text: string) => void;
+  media: File | null;
+  setMedia: (file: File | null) => void;
   openCreatePost: boolean;
   onClosecreatePost: () => void;
-}) => (
-  <Dialog
-    open={openCreatePost}
-    onClose={onClosecreatePost}
-    fullWidth
-    maxWidth="sm"
-  >
-    <DialogTitle>Create a Post</DialogTitle>
-    <DialogContent>
-      <Paper sx={{ p: 2 }}>
-        <Typography mb={1}>What's on your mind?</Typography>
-        <TextField
-          multiline
-          fullWidth
-          rows={4}
-          placeholder="Start writing your post..."
-          variant="outlined"
-        />
-      </Paper>
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={onClosecreatePost} color="secondary">
-        Cancel
-      </Button>
-      <Button variant="contained" color="primary">
-        Post
-      </Button>
-    </DialogActions>
-  </Dialog>
-);
+  onSavePost: () => void;
+}) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setMedia(file);
+  };
+
+  return (
+    <Dialog open={openCreatePost} onClose={onClosecreatePost} fullWidth maxWidth="sm">
+      <DialogTitle>Create a Post</DialogTitle>
+      <DialogContent>
+        <Paper sx={{ p: 2 }}>
+          <TextField
+            multiline
+            fullWidth
+            rows={4}
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
+            placeholder="What do you want to talk about?"
+            variant="outlined"
+            InputProps={{
+              style: {
+                fontSize: "0.95rem",
+              },
+            }}
+          />
+
+          {/* Upload buttons */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
+            <input
+              accept="image/*,video/*"
+              type="file"
+              id="upload-media"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <label htmlFor="upload-media">
+              <IconButton color="primary" component="span">
+                {/* You can add a media icon here */}
+              </IconButton>
+            </label>
+            <Typography variant="body2" color="text.secondary">
+              {media ? media.name : "Add image or video"}
+            </Typography>
+          </Box>
+        </Paper>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClosecreatePost} color="secondary">
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!postText && !media}
+          onClick={onSavePost}
+        >
+          Post
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};

@@ -108,6 +108,7 @@ export function DashboardLayout({
               sx: {
                 [theme.breakpoints.up("lg")]: {
                   height: "45px",
+                  bgcolor:"white"
                 },
               },
             },

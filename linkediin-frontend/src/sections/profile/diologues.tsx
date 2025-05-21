@@ -12,6 +12,23 @@ import {
 } from "@mui/material";
 import { DialogActions } from "@mui/material";
 
+
+interface PostItem {
+  text: string;
+  mediaUrl?: string;
+}
+
+interface CreatePostDialogProps {
+  postText: string;
+  setPostText: (text: string) => void;
+  media: File | null;
+  setMedia: (file: File | null) => void;
+  openCreatePost: boolean;
+  onClosecreatePost: () => void;
+  onSavePost: () => void;
+  posts: PostItem[];
+}
+
 interface DialogsProps {
   openBox1: boolean;
   onCloseBox1: () => void;
@@ -131,7 +148,7 @@ export const EditAboutDialog = ({
 };
 
 
-export const CreatePostDialog = ({
+export function CreatePostDialog({
   postText,
   setPostText,
   media,
@@ -139,73 +156,54 @@ export const CreatePostDialog = ({
   openCreatePost,
   onClosecreatePost,
   onSavePost,
-}: {
-  postText: string;
-  setPostText: (text: string) => void;
-  media: File | null;
-  setMedia: (file: File | null) => void;
-  openCreatePost: boolean;
-  onClosecreatePost: () => void;
-  onSavePost: () => void;
-}) => {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setMedia(file);
-  };
-
+  posts,
+}: CreatePostDialogProps) {
   return (
     <Dialog open={openCreatePost} onClose={onClosecreatePost} fullWidth maxWidth="sm">
       <DialogTitle>Create a Post</DialogTitle>
       <DialogContent>
-        <Paper sx={{ p: 2 }}>
-          <TextField
-            multiline
-            fullWidth
-            rows={4}
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-            placeholder="What do you want to talk about?"
-            variant="outlined"
-            InputProps={{
-              style: {
-                fontSize: "0.95rem",
-              },
+        <TextField
+          fullWidth
+          multiline
+          rows={3}
+          label="What's on your mind?"
+          value={postText}
+          onChange={(e) => setPostText(e.target.value)}
+          sx={{ mt: 1 }}
+        />
+        <Button variant="contained" component="label" sx={{ mt: 2 }}>
+          Upload Image
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setMedia(e.target.files[0]);
+              }
             }}
           />
+        </Button>
 
-          {/* Upload buttons */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
-            <input
-              accept="image/*,video/*"
-              type="file"
-              id="upload-media"
-              style={{ display: "none" }}
-              onChange={handleFileChange}
+        {/* Preview uploaded image */}
+        {media && (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2">Preview:</Typography>
+            <img
+              src={URL.createObjectURL(media)}
+              alt="Preview"
+              style={{ maxWidth: "100%", borderRadius: 8 }}
             />
-            <label htmlFor="upload-media">
-              <IconButton color="primary" component="span">
-                {/* You can add a media icon here */}
-              </IconButton>
-            </label>
-            <Typography variant="body2" color="text.secondary">
-              {media ? media.name : "Add image or video"}
-            </Typography>
           </Box>
-        </Paper>
+        )}
+
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClosecreatePost} color="secondary">
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={!postText && !media}
-          onClick={onSavePost}
-        >
+        <Button onClick={onClosecreatePost}>Cancel</Button>
+        <Button onClick={onSavePost} variant="contained">
           Post
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
+}

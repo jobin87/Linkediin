@@ -21,6 +21,9 @@ const IndexPage = lazy(() => import('src/pages/home'));
 
 
 const ProfilePage = lazy(() => import('src/pages/profile'));
+const PostPage = lazy(() => import('src/pages/post'));
+
+
 
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
 
@@ -58,6 +61,12 @@ const DashboardRoutesWrapper = () => {
             path: 'profile',
             children: [
               { element: <ProfilePage/>, index: true },
+            ],
+          },
+           {
+            path: 'post',
+            children: [
+              { element: <PostPage/>, index: true },
             ],
           },
 

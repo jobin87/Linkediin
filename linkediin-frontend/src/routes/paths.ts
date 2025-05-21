@@ -40,6 +40,9 @@ export const paths = {
     profile: {
       root: `${ROOTS.DASHBOARD}/profile`,
     },
+    post: {
+      root: `${ROOTS.DASHBOARD}/post`,
+    },
     
     Treatment: {
       root: `${ROOTS.DASHBOARD}/treatment`,

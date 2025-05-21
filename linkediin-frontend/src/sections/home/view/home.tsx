@@ -7,7 +7,7 @@ import { DashboardRight } from "../right"
 export const  Home =()=>{
 
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', bgcolor: 'grey.100', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex',bgcolor: '#fcf8f4', minHeight: '100vh',p:"0px 0px 0px 130px"}}>
       <DashboardLeft />
       <DashboardMiddle />
       <DashboardRight />
